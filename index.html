@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ortopedski utrip</title>
+<meta name="description" content="Ortopedske novice, raziskave in zanimivosti, preverjene ob izvirnih virih.">
+<meta name="theme-color" content="#2B5C8A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<script>
+  /* Ko se stran odpre z ikone na začetnem zaslonu, takoj odpri aplikacijo. */
+  var APP = "https://claude.ai/artifact/E8iHkyJXB3YS2u2HmFTqE9";
+  var fromIcon = /[?&]zagon=1/.test(location.search) ||
+    (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+  if (fromIcon) location.replace(APP);
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,600&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#8FB8DE; --ink:#16324d; --deep:#2B5C8A; --wood:#F7B27A;
+    --bg:#f3f7fb; --card:#ffffff; --muted:#4f6478; --line:#d6e2ee;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0f1b27; --card:#16263a; --ink:#e8f0f8; --muted:#a9bccf; --line:#2a3f57; --deep:#8FB8DE; color-scheme:dark; }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:400 1rem/1.55 "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    display:grid; place-items:center; min-height:100vh;
+    padding:max(24px, env(safe-area-inset-top)) 22px max(28px, env(safe-area-inset-bottom));
+  }
+  main{width:100%; max-width:420px; text-align:center}
+  .logo{width:148px; height:148px; display:block; margin:0 auto 22px; filter:drop-shadow(0 10px 22px rgba(43,92,138,.28))}
+  h1{font:600 2.3rem/1.1 Newsreader, Georgia, "Times New Roman", serif; margin:0 0 10px; letter-spacing:-.01em}
+  .lead{color:var(--muted); margin:0 auto 28px; max-width:30ch}
+  .btn{display:block; width:100%; border:0; border-radius:14px; padding:15px 18px; font:600 1.05rem "Instrument Sans", system-ui, sans-serif; cursor:pointer; text-decoration:none; margin-bottom:12px}
+  .open{background:var(--deep); color:#fff}
+  @media (prefers-color-scheme: dark){ .open{color:#0f1b27} }
+  .install{background:var(--card); color:var(--ink); border:1.5px solid var(--line)}
+  .btn:focus-visible{outline:3px solid var(--wood); outline-offset:3px}
+  .how{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; text-align:left; font-size:.94rem; color:var(--muted); margin-top:6px}
+  .how b{color:var(--ink); font-weight:600}
+  .how ol{margin:6px 0 0; padding-left:1.2em}
+  .how li{margin:3px 0}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<main>
+  <img class="logo" src="icon-512.png" alt="Logotip Ortopedski utrip" width="148" height="148">
+  <h1>Ortopedski utrip</h1>
+  <p class="lead">Ortopedske novice, raziskave in zanimivosti, preverjene ob izvirnih virih.</p>
+  <a class="btn open" id="open" href="https://claude.ai/artifact/E8iHkyJXB3YS2u2HmFTqE9">Odpri aplikacijo</a>
+  <button class="btn install" id="install" hidden>Dodaj na začetni zaslon</button>
+  <div class="how" id="how">
+    <b>Ikona na začetnem zaslonu</b>
+    <ol>
+      <li>To stran odpri v brskalniku Chrome.</li>
+      <li>Tapni meni ⋮ zgoraj desno.</li>
+      <li>Izberi »Dodaj na začetni zaslon« ali »Namesti aplikacijo«.</li>
+    </ol>
+  </div>
+</main>
+<script>
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function(){});
+  var deferred = null;
+  var btn = document.getElementById("install"), how = document.getElementById("how");
+  window.addEventListener("beforeinstallprompt", function(e){
+    e.preventDefault(); deferred = e; btn.hidden = false; how.hidden = true;
+  });
+  btn.addEventListener("click", function(){
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.finally(function(){ deferred = null; btn.hidden = true; });
+  });
+  window.addEventListener("appinstalled", function(){ btn.hidden = true; how.hidden = true; });
+</script>
+</body>
+</html>
