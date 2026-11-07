@@ -258,6 +258,11 @@ h3.sec{max-width:640px;margin:18px auto 8px;padding:0 16px;font:600 .95rem "Inst
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media (prefers-reduced-motion: reduce){#toast{transition:none}}
 footer .lnk{font-size:.8rem}
+.bar{position:relative}
+.brand{padding-right:48px}
+.admbtn{position:absolute;right:12px;top:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.admbtn svg{width:19px;height:19px}
+.admbtn.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
 [hidden]{display:none !important}
 
 </style>
@@ -269,6 +274,7 @@ footer .lnk{font-size:.8rem}
       <h1><svg class="logo" viewBox="0 0 400 400" aria-hidden="true"><rect width="400" height="400" rx="88" fill="#8FB8DE"/><text x="200" y="283" text-anchor="middle" font-family="Manrope, system-ui, sans-serif" font-weight="800" font-size="236" letter-spacing="-6" fill="#2B5C8A">OU</text><rect x="139" y="58" width="24" height="288" rx="12" fill="#F7B27A"/><path d="M147 84 L147 150 M155 170 L155 250 M147 268 L147 330" stroke="#E58F52" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M205 95 Q285 200 205 305" stroke="#fff" stroke-width="27" stroke-linecap="round" fill="none"/><circle cx="211.3" cy="80.1" r="18" fill="#fff"/><circle cx="189.1" cy="97.1" r="18" fill="#fff"/><circle cx="211.3" cy="319.9" r="18" fill="#fff"/><circle cx="189.1" cy="302.9" r="18" fill="#fff"/><path d="M163 137 L216 142 M163 200 L229 200 M163 263 L216 258" stroke="#F7B27A" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M215 144 L246 130 M228 200 L262 200 M215 256 L246 270" stroke="#F7B27A" stroke-width="9" stroke-linecap="round" fill="none"/><rect x="135" y="131" width="32" height="12" rx="6" fill="#E58F52"/><rect x="135" y="194" width="32" height="12" rx="6" fill="#E58F52"/><rect x="135" y="257" width="32" height="12" rx="6" fill="#E58F52"/></svg>Ortopedski utrip</h1>
       <span class="updated" id="updated"></span>
     </div>
+    <button class="admbtn" id="admopen" aria-label="Prijava skrbnika" title="Prijava skrbnika"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" aria-selected="true" data-view="feed">Novo</button>
       <button class="tab" role="tab" aria-selected="false" data-view="saved">Shranjeno</button>
@@ -287,7 +293,6 @@ footer .lnk{font-size:.8rem}
 <footer>
   <p>Vse objave, povzetke in preverjanja v Ortopedskem utripu samodejno pripravlja umetna inteligenca (Claude, Anthropic). Lahko vsebujejo napake. Vir vsake objave je naveden pod gumbom Vir ali Viri.</p>
   <p>Komentarji in predlogi tem se shranjujejo v podatkovni bazi v EU skupaj z imenom, ki ga vpišeš. Račun ni potreben; svoj komentar lahko izbrišeš z iste naprave.</p>
-  <p><a href="#" class="lnk" id="admopen">Prijava skrbnika</a></p>
 </footer>
 <button class="fab" id="addbtn" aria-label="Predlagaj temo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
 
@@ -461,7 +466,7 @@ function card(p){
       ${openMore.has(p.id)?`<div class="more">
         ${p.basis&&BASIS[p.basis]?`<span class="basis">${BASIS[p.basis]}</span>`:""}
         <p>${esc(p.text)}</p>
-        ${p.why?`<div class="why"><b>Zakaj je pomembno:</b> ${esc(p.why)}</div>`:""}
+        ${p.why?`<div class="why"><b>${p.kind==="topic"?"Poudarek":"Zakaj je pomembno"}:</b> ${esc(p.why)}</div>`:""}
         ${(p.kind==="study"||p.kind==="news")&&(p.dateLabel||p.date)?`<div class="ev">${p.kind==="study"?"Članek je izšel":"Vir je bil objavljen"}: ${esc(p.dateLabel||fmtDate(p.date))}</div>`:""}
         ${p.evidence?`<div class="ev">Vrsta dokazov: ${esc(p.evidence)}</div>`:""}
       </div>`:""}
@@ -483,6 +488,7 @@ function card(p){
 function render(){
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.view===view)));
   $("#reviewtab").hidden=!isAdmin;
+  const ab=$("#admopen");ab.classList.toggle("on",isAdmin);ab.setAttribute("aria-label",isAdmin?"Pregled skrbnika":"Prijava skrbnika");ab.title=ab.getAttribute("aria-label");
   renderChips();
   const tf=$("#tagfilter");tf.classList.toggle("on",!!tag&&(view==="feed"||view==="saved"));$("#tagtext").textContent=tag?"Oznaka: #"+tag:"";
   const feed=$("#feed");
@@ -613,7 +619,7 @@ document.addEventListener("click",async e=>{
   if(t.id==="sgsend"){sendSuggest();return}
   if(t.id==="sgmine"){closeSheets();view="mine";mySugg=null;window.scrollTo(0,0);render();return}
   if(d.close){closeSheets();return}
-  if(t.id==="admopen"){e.preventDefault();$("#admkey").value="";$("#admmsg").textContent="";openSheet("#admsheet");setTimeout(()=>$("#admkey").focus(),50);return}
+  if(t.id==="admopen"){e.preventDefault();if(isAdmin){view="review";admSugg=null;window.scrollTo(0,0);render();return}$("#admkey").value="";$("#admmsg").textContent="";openSheet("#admsheet");setTimeout(()=>$("#admkey").focus(),50);return}
   if(t.id==="admgo"){adminLogin();return}
   if(d.logout){adminLogout();return}
   if(d.admreload){admSugg=null;renderReview();return}
