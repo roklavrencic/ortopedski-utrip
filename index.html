@@ -87,7 +87,7 @@ article{background:var(--card);border-top:1px solid var(--line);border-bottom:1p
 button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 .askbtn{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;background:var(--accent);color:var(--card);border:0;border-radius:999px;padding:12px 18px;font:600 .95rem "Instrument Sans",sans-serif;box-shadow:0 4px 14px color-mix(in srgb, var(--ink) 25%, transparent);cursor:pointer;display:none}
-.askbtn.on{display:block}
+.askbtn.on{display:block;text-decoration:none}
 .sheet{position:fixed;inset:0;z-index:20;display:none;background:color-mix(in srgb, var(--ink) 40%, transparent)}
 .sheet.open{display:flex;align-items:flex-end;justify-content:center}
 .panel{background:var(--card);width:100%;max-width:640px;height:min(88vh,720px);border-radius:16px 16px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -294,6 +294,7 @@ footer .lnk{font-size:.8rem}
   <p>Vse objave, povzetke in preverjanja v Ortopedskem utripu samodejno pripravlja umetna inteligenca (Claude, Anthropic). Lahko vsebujejo napake. Vir vsake objave je naveden pod gumbom Vir ali Viri.</p>
   <p>Komentarji in predlogi tem se shranjujejo v podatkovni bazi v EU skupaj z imenom, ki ga vpišeš. Račun ni potreben; svoj komentar lahko izbrišeš z iste naprave.</p>
 </footer>
+<a class="askbtn" id="ortolink" href="https://claude.ai/artifact/E8iHkyJXB3YS2u2HmFTqE9" target="_blank" rel="noopener" title="Odpre različico na claude.ai, kjer je na voljo klepet (samo za skrbnika)">Klepet z Ortopedkom</a>
 <button class="fab" id="addbtn" aria-label="Predlagaj temo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
 
 <div class="sheet" id="sgsheet" role="dialog" aria-modal="true" aria-labelledby="sgtitle">
@@ -488,6 +489,7 @@ function card(p){
 function render(){
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",String(t.dataset.view===view)));
   $("#reviewtab").hidden=!isAdmin;
+  $("#ortolink").classList.toggle("on",isAdmin);
   const ab=$("#admopen");ab.classList.toggle("on",isAdmin);ab.setAttribute("aria-label",isAdmin?"Pregled skrbnika":"Prijava skrbnika");ab.title=ab.getAttribute("aria-label");
   renderChips();
   const tf=$("#tagfilter");tf.classList.toggle("on",!!tag&&(view==="feed"||view==="saved"));$("#tagtext").textContent=tag?"Oznaka: #"+tag:"";
