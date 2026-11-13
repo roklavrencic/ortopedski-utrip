@@ -229,6 +229,7 @@ footer{max-width:640px;margin:0 auto;padding:0 16px 32px;font-size:.8rem;color:v
 .counts{display:flex;justify-content:space-between;align-items:center;margin:0 16px;padding:0 0 6px;font-size:.82rem;color:var(--muted);min-height:6px}
 .counts button{background:none;border:0;color:var(--muted);font:500 .82rem "Instrument Sans",sans-serif;cursor:pointer;padding:0}
 .cmname{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:400 .95rem "Instrument Sans",sans-serif;background:var(--bg);color:var(--ink)}
+.lnkt{display:block;background:none;border:0;padding:0;margin:2px 0;text-align:left;color:var(--ink);font:600 .95rem "Instrument Sans",sans-serif;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line)}
 .lnk{background:none;border:0;padding:0;color:var(--accent);font:500 .8rem "Instrument Sans",sans-serif;cursor:pointer;text-decoration:underline}
 .box{max-width:640px;margin:0 auto 12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:.93rem}
 @media (max-width:659px){.box{border-radius:0;border-left:0;border-right:0}}
@@ -264,6 +265,59 @@ footer .lnk{font-size:.8rem}
 .admbtn svg{width:19px;height:19px}
 .admbtn.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
 [hidden]{display:none !important}
+/* ---- privlačnejši feed ---- */
+/* ---- prijava napake ---- */
+.rptbtn{display:inline-block;background:none;border:0;padding:4px 0 2px;margin:0 0 8px;color:var(--muted);font:500 .8rem "Instrument Sans",sans-serif;text-decoration:underline;cursor:pointer}
+.rptbtn:hover{color:var(--accent)}
+/* ---- berljivo besedilo ---- */
+.more p{margin:0 0 11px;line-height:1.62;white-space:normal}
+.more p b{font-weight:700}
+.tsec{font:800 .74rem Manrope,"Instrument Sans",system-ui,sans-serif;letter-spacing:.06em;color:var(--accent);margin:18px 0 6px;padding-top:12px;border-top:1px solid var(--line)}
+.more .tsec:first-child,.more .basis+.tsec{margin-top:4px;padding-top:0;border-top:0}
+.tl{margin:0 0 11px;padding-left:1.25em}.tl li{margin:4px 0;line-height:1.5}
+.why ul{margin:6px 0 0;padding-left:1.25em}.why li{margin:4px 0;line-height:1.5}
+
+#chips{display:none !important}
+body{background-image:linear-gradient(180deg,color-mix(in srgb,#8FB8DE 26%,var(--bg)),var(--bg) 460px);background-repeat:no-repeat}
+article{margin-bottom:16px}
+.today{max-width:640px;margin:0 auto 12px;display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;background:linear-gradient(135deg,#2B5C8A,#3E78AD);color:#FFFFFF;border-radius:14px;padding:14px 16px;box-shadow:0 6px 18px rgba(43,92,138,.22)}
+.today .tdk{display:block;font:800 .7rem Manrope,"Instrument Sans",system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.85;margin-bottom:2px}
+.today b{font:600 1.2rem "Newsreader",Georgia,serif}
+.tdc{display:flex;gap:6px;flex-wrap:wrap}
+.tdc span{background:rgba(255,255,255,.18);border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:600}
+.fband{max-width:640px;margin:0 auto 12px;display:flex;align-items:stretch;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#FDEBDA,#F9D6B8);color:#5A2E0E;box-shadow:0 6px 18px rgba(229,138,69,.18)}
+.fbtxt{padding:12px 14px;flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}
+.fbk{font:800 .7rem Manrope,"Instrument Sans",system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#B4572A}
+.fband b{font:600 1.25rem "Newsreader",Georgia,serif;color:#3D1F08}
+.fbm{font-size:.8rem;color:#7A4A26}
+.fbp{height:6px;border-radius:3px;background:rgba(180,87,42,.18);overflow:hidden;margin-top:2px}
+.fbp i{display:block;height:100%;background:#E58A45;border-radius:3px}
+.fband button{align-self:flex-start;margin-top:4px;border:0;border-radius:999px;background:#E58A45;color:#FFFFFF;font:600 .82rem "Instrument Sans",sans-serif;padding:7px 14px;cursor:pointer}
+.fbimg{width:118px;flex:none;background:linear-gradient(135deg,#A3C6E6,#86B0D8)}
+.fbimg svg{width:100%;height:100%;display:block}
+.arearow{max-width:640px;margin:0 auto 12px;display:flex;gap:10px;overflow-x:auto;padding:4px 16px 6px;scrollbar-width:none}
+.arearow::-webkit-scrollbar{display:none}
+.areab{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:0;cursor:pointer;padding:0;width:64px}
+.areac{width:56px;height:56px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:linear-gradient(135deg,#A3C6E6,#86B0D8);box-shadow:0 0 0 2px var(--card);transition:box-shadow .15s,transform .15s}
+.areac svg{width:100%;height:100%;display:block}
+.areac.all{font:800 .78rem Manrope,"Instrument Sans",system-ui,sans-serif;color:#FFFFFF;background:linear-gradient(135deg,#2B5C8A,#3E78AD)}
+.areal{font-size:.72rem;font-weight:600;color:var(--muted);text-align:center;line-height:1.15}
+.areab.on .areac{box-shadow:0 0 0 2px var(--card),0 0 0 4.5px #E58A45}
+.areab.on .areal{color:var(--ink)}
+.areab:focus-visible{outline:none}.areab:focus-visible .areac{box-shadow:0 0 0 2px var(--card),0 0 0 4.5px var(--accent)}
+@media (max-width:659px){.today,.fband{margin-left:12px;margin-right:12px}}
+@keyframes ouIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@keyframes ouPop{0%{transform:scale(1)}40%{transform:scale(1.28)}100%{transform:scale(1)}}
+.more{animation:ouIn .25s ease}
+.actions [aria-pressed="true"] svg{animation:ouPop .32s ease}
+.counts svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}
+@media (prefers-reduced-motion: reduce){.more,.actions [aria-pressed="true"] svg{animation:none}.areac{transition:none}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fband{background:linear-gradient(135deg,#3B2A1D,#4A321F);color:#F6E3D2}:root:not([data-theme="light"]) .fband b{color:#FFF1E4}:root:not([data-theme="light"]) .fbm{color:#E9C9AC}:root:not([data-theme="light"]) .fbk{color:#F2A76B}}
+:root[data-theme="dark"] .fband{background:linear-gradient(135deg,#3B2A1D,#4A321F);color:#F6E3D2}
+:root[data-theme="dark"] .fband b{color:#FFF1E4}
+:root[data-theme="dark"] .fbm{color:#E9C9AC}
+:root[data-theme="dark"] .fbk{color:#F2A76B}
+
 /* ---- slike in več kontrasta ---- */
 :root{--bg:#DAE3EC;--ink:#0F1A24;--muted:#465767;--line:#C3CFDA;--accent-soft:#DCE6FA}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0A1016;--card:#16202A;--ink:#EEF2F6;--muted:#A8B6C2;--line:#2E3B48}}
@@ -356,6 +410,23 @@ article{box-shadow:0 1px 2px rgba(15,30,45,.06),0 8px 22px rgba(15,30,45,.07)}
     </div>
   </div>
 </div>
+<div class="sheet" id="rpsheet" role="dialog" aria-modal="true" aria-labelledby="rptitle">
+  <div class="panel short">
+    <div class="phead"><div><p class="ptitle" id="rptitle">Prijavi napako</p><div class="psub" id="rpsub"></div></div><button class="x" data-close="1" aria-label="Zapri">×</button></div>
+    <div class="form" id="rpform">
+      <label>Kaj je narobe? *<textarea id="rpbody" maxlength="1000" placeholder="npr. Podatek 27 % ni pravilen, v izvirniku piše 17 %."></textarea></label>
+      <label>Tvoje ime (neobvezno)<input id="rpname" maxlength="40" autocomplete="name"></label>
+      <div class="ainote">Prijavo ob naslednjem pregledu preveri umetna inteligenca v izvirnih virih. Če je napaka potrjena, se objava popravi. Stanje prijave vidiš v zavihku Moje teme.</div>
+      <div class="msg" id="rpmsg" role="alert"></div>
+      <button class="go" id="rpsend">Pošlji prijavo</button>
+    </div>
+    <div class="form" id="rpdone" hidden>
+      <p><b>Hvala, prijava je oddana.</b></p>
+      <p class="om">Preverjena bo ob naslednjem pregledu objav.</p>
+      <div class="row"><button class="btn2" data-close="1">Zapri</button></div>
+    </div>
+  </div>
+</div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 "use strict";
@@ -372,6 +443,8 @@ const MONTHS=["jan.","feb.","mar.","apr.","maj","jun.","jul.","avg.","sep.","okt
 const CMW=["komentar","komentarja","komentarji","komentarjev"];
 const LKW=["všeček","všečka","všečki","všečkov"];
 const ICON={
+  heart:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#2B5C8A"/><path d="M6.5 11h2.6v7H6.5zM10.4 18h5.3c.7 0 1.3-.5 1.4-1.2l.8-4.3c.1-.8-.5-1.5-1.3-1.5h-3.3l.5-2.6c.1-.8-.5-1.4-1.2-1.4l-2.2 4.2z" fill="#FFFFFF"/></svg>',
+  cmsm:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H10l-6 4z"/></svg>',
   cm:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H10l-6 4z"/><path d="M8 9h8M8 12.5h5"/></svg>',
   check:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="m9 12 2 2 4-4"/></svg>',
   like:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v11H3V10h4zm0 0 4-8c1.7 0 3 1.3 3 3v4h5.4a2 2 0 0 1 2 2.3l-1.3 8A2 2 0 0 1 18.1 21H7"/></svg>',
@@ -417,7 +490,7 @@ const TOKEN=token();
 /* ---- stanje ---- */
 let posts=[], stats={}, focus=null, loaded=false, loadErr=false, lastLoad=0;
 let liked=new Set(ls.get("ou-vsec",[])), saved=new Set(ls.get("ou-shranjeno",[])), myCm=new Set(ls.get("ou-moji-komentarji",[]));
-let view="feed", kind="all", tag=null, q="";
+let view="feed", kind="all", tag=null, q="", areaSel=null;
 const openMore=new Set(), openCm=new Set(), openSrc=new Set(), cms={}, cmLoading=new Set(), cmDraft={};
 let adminKey=ls.get("ou-skrbnik",null), isAdmin=false, mySugg=null, admSugg=null, admNote={};
 
@@ -435,10 +508,46 @@ function cleanPost(row){
   p.publishedAt=typeof d.publishedAt==="string"&&d.publishedAt?d.publishedAt:String(row.published_at||"");
   p.sortKey=Date.parse(row.published_at)||Date.parse(p.publishedAt)||0;
   cleanVis(d,p);
-  if(d.check&&typeof d.check==="object"){const c=d.check;p.check={date:okDate(c.date)?c.date:"",status:VLABEL[c.status]?c.status:"partial",note:s(c.note,2500),sources:cleanSrc(c.sources)};if(!p.check.sources.length&&p.url)p.check.sources=[{label:p.source||"Vir",url:p.url}]}
+  if(d.check&&typeof d.check==="object"){const c=d.check;p.check={date:okDate(c.date)?c.date:"",status:VLABEL[c.status]?c.status:"partial",note:s(c.note,2500),sources:cleanSrc(c.sources)};if(c.recheck&&typeof c.recheck==="object"&&okDate(c.recheck.date))p.check.recheck={date:c.recheck.date,status:c.recheck.status==="corrected"?"corrected":"ok",note:s(c.recheck.note,1500)};if(!p.check.sources.length&&p.url)p.check.sources=[{label:p.source||"Vir",url:p.url}]}
   return p;
 }
 function pubLabel(p){const v=String(p.publishedAt||"");if(/T/.test(v)){const t=fmtWhen(v);if(t)return t}return okDate(v.slice(0,10))?fmtDate(v.slice(0,10)):""}
+/* ---- berljivo besedilo: odstavki, podnaslovi, seznami ---- */
+const ABBR_END=/(?:^|[\s(])(?:npr|itd|oz|sod|angl|št|dr|prof|tj|ipd|pribl|vol|vs|min|maks|tzv|i|op|ca|prim|gl|str|sl|cca|mio|mrd|lat|al|br|mag|doc|izr|red)\.$/i;
+function sentencesOf(t){
+  const raw=String(t).split(/(?<=[.!?])\s+(?=[A-ZČŠŽĆĐ0-9„"«(])/), out=[];
+  for(const s of raw){ if(out.length&&ABBR_END.test(out[out.length-1]))out[out.length-1]+=" "+s; else out.push(s) }
+  return out;
+}
+function chunksOf(t,max=280){
+  if(t.length<=max+80)return [t];
+  const res=[];let cur="";
+  for(const s of sentencesOf(t)){ if(cur&&(cur+" "+s).length>max){res.push(cur);cur=s} else cur=cur?cur+" "+s:s }
+  if(cur)res.push(cur);return res;
+}
+function isHeadLine(l){return l.length<=70&&/[A-ZČŠŽĆĐ]{3}/.test(l)&&l===l.toUpperCase()&&!/[.!?;]$/.test(l)}
+function fmtText(text){
+  const lines=String(text||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  let h="",ul=[];
+  const flush=()=>{if(ul.length){h+=`<ul class="tl">${ul.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;ul=[]}};
+  for(const l of lines){
+    if(/^[-•–]\s+/.test(l)){ul.push(l.replace(/^[-•–]\s+/,""));continue}
+    flush();
+    if(isHeadLine(l)){h+=`<h3 class="tsec">${esc(l)}</h3>`;continue}
+    const m=l.match(/^([A-ZČŠŽĆĐ][a-zčšžćđ]+(?: [a-zčšžćđA-ZČŠŽĆĐ]+){0,2}):\s+(.+)$/);
+    const body=m?m[2]:l;
+    chunksOf(body).forEach((pt,i)=>{h+=`<p>${i===0&&m?`<b>${esc(m[1])}:</b> `:""}${esc(pt)}</p>`});
+  }
+  flush();return h;
+}
+function fmtWhy(p){
+  if(!p.why)return "";
+  const lab=p.kind==="topic"?"Poudarek":"Zakaj je pomembno";
+  const w=String(p.why).replace(/^\s*(Zakaj je pomembno|Poudarek)\s*:\s*/i,"");
+  const items=w.split(/;\s+/).map(x=>x.trim().replace(/[.;]\s*$/,"")).filter(Boolean);
+  if(p.kind==="topic"&&items.length>=2)return `<div class="why"><b>${lab}</b><ul>${items.map(x=>`<li>${esc(x.charAt(0).toUpperCase()+x.slice(1))}</li>`).join("")}</ul></div>`;
+  return `<div class="why"><b>${lab}:</b> ${esc(w)}</div>`;
+}
 function sumOf(p){
   if(p.summary)return p.summary;
   if(p.hook)return p.hook;
@@ -486,6 +595,48 @@ function cleanVis(d,p){
   const ph=d.photo;if(okPhoto(ph))p.photo={url:ph.url,alt:String(ph.alt||ph.caption||"Slika").slice(0,200),caption:String(ph.caption||"").slice(0,300),author:String(ph.author||"").slice(0,150),license:String(ph.license).slice(0,60),licenseUrl:typeof ph.licenseUrl==="string"&&/^https:\/\/\S+$/.test(ph.licenseUrl)?ph.licenseUrl:"",sourceUrl:ph.sourceUrl};
 }
 
+/* ---- privlačnejši feed: področja, tematsko obdobje, danes v utripu ---- */
+const AREA_ORDER=["koleno","kolk","rama","hrbtenica","roka","stopalo","travma","otroska","tumorji","okuzbe","artro","zgodovina","splosno"];
+const AREA_LABEL=Object.fromEntries(COVER_AREAS.map(a=>[a[0],a[1]]));AREA_LABEL.splosno="Splošno";AREA_LABEL.otroska="Otroška";AREA_LABEL.rama="Rama";AREA_LABEL.roka="Roka";AREA_LABEL.stopalo="Stopalo";
+function pl(n,f){const m=n%100;return n+" "+(m===1?f[0]:m===2?f[1]:(m===3||m===4)?f[2]:f[3])}
+function thumbSvg(k,uid){
+  const kk=ILLU[k]?k:"splosno", s=ILLU[kk];
+  return s.split("-"+kk+'"').join("-"+kk+"-"+uid+'"').split("-"+kk+")").join("-"+kk+"-"+uid+")")
+    .replace('viewBox="250 0 350 300"','viewBox="285 5 290 290" preserveAspectRatio="xMidYMid slice"');
+}
+function localDay(v){v=String(v||"");if(!/T/.test(v))return v.slice(0,10);const d=new Date(v);if(isNaN(d))return "";return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function areaRowHtml(all,sel){
+  const cnt={};all.forEach(p=>{const a=areaOf(p)[0];cnt[a]=(cnt[a]||0)+1});
+  const keys=AREA_ORDER.filter(k=>cnt[k]);
+  if(keys.length<2&&!sel)return "";
+  return `<div class="arearow" aria-label="Področja">`+
+    `<button class="areab${!sel?" on":""}" data-area="" aria-pressed="${!sel}"><span class="areac all">Vse</span><span class="areal">Vsa področja</span></button>`+
+    keys.map(k=>`<button class="areab${sel===k?" on":""}" data-area="${k}" aria-pressed="${sel===k}" title="${esc(AREA_LABEL[k]||k)}: ${cnt[k]}"><span class="areac">${thumbSvg(k,"t"+k)}</span><span class="areal">${esc(AREA_LABEL[k]||k)}</span></button>`).join("")+`</div>`;
+}
+function focusBandHtml(f,all){
+  if(!f||!f.from||!f.to)return "";
+  const t=todayISO(), d0=new Date(f.from+"T12:00:00"), d1=new Date(f.to+"T12:00:00"), dn=new Date(t+"T12:00:00");
+  const total=Math.round((d1-d0)/864e5)+1, day=Math.min(total,Math.max(1,Math.round((dn-d0)/864e5)+1)), pct=Math.round(day/total*100);
+  const area=String(f.area||"").toLowerCase();
+  const n=all.filter(p=>localDay(p.publishedAt)>=f.from&&p.tags.some(x=>String(x).toLowerCase()===area)).length;
+  const key=(COVER_AREAS.find(a=>a[2].includes(area))||["splosno"])[0];
+  return `<div class="fband"><div class="fbtxt"><span class="fbk">Tematsko obdobje</span><b>${esc(f.label||area)}</b>
+    <span class="fbm">${fmtDate(f.from)} – ${fmtDate(f.to)}</span>
+    <div class="fbp" role="progressbar" aria-valuemin="1" aria-valuemax="${total}" aria-valuenow="${day}" aria-label="Dan obdobja"><i style="width:${pct}%"></i></div>
+    <span class="fbm">${day}. od ${total} dni · ${pl(n,["objava","objavi","objave","objav"])} s področja</span>
+    <button data-tag="${esc(f.area)}">Pokaži objave</button></div><div class="fbimg">${thumbSvg(key,"fband")}</div></div>`;
+}
+function todayHtml(all){
+  const t=todayISO(), td=all.filter(p=>localDay(p.publishedAt)===t);
+  if(!td.length){
+    const last=all.map(p=>localDay(p.publishedAt)).filter(Boolean).sort().pop();
+    return `<div class="today"><div><span class="tdk">Danes v utripu</span><b>Danes še ni novih objav</b></div>${last?`<div class="tdc"><span>Zadnje objave: ${fmtDate(last)}</span></div>`:""}</div>`;
+  }
+  const art=td.filter(p=>p.kind==="study"||p.kind==="news").length, top=td.filter(p=>p.kind==="topic").length, oth=td.length-art-top;
+  const chips=[art?pl(art,["članek","članka","članki","člankov"]):"",top?pl(top,["učna tema","učni temi","učne teme","učnih tem"]):"",oth?pl(oth,["druga objava","drugi objavi","druge objave","drugih objav"]):""].filter(Boolean);
+  return `<div class="today"><div><span class="tdk">Danes v utripu</span><b>${pl(td.length,["nova objava","novi objavi","nove objave","novih objav"])}</b></div><div class="tdc">${chips.map(c=>`<span>${c}</span>`).join("")}</div></div>`;
+}
+
 async function load(){
   try{
     const [rows,sets,st]=await Promise.all([
@@ -508,7 +659,7 @@ function focusBar(){const f=focusActive();if(!f||view!=="feed")return "";return 
 function verifyBlock(p){
   if(!p.check)return "";
   const st=p.check.status, src=p.check.sources.map(x=>`<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.label)}</a></li>`).join("");
-  return `<details class="verify ${st}"><summary>${ICON.check}<b>${VLABEL[st]}</b>${p.check.date?" "+fmtDate(p.check.date):""} · preverila umetna inteligenca</summary><div class="vbody"><p>${esc(p.check.note)}</p>${src?`<ul>${src}</ul>`:""}</div></details>`;
+  return `<details class="verify ${st}"><summary>${ICON.check}<b>${VLABEL[st]}</b>${p.check.date?" "+fmtDate(p.check.date):""}${p.check.recheck?" · ponovno preverjeno":""} · umetna inteligenca</summary><div class="vbody"><p>${esc(p.check.note)}</p>${p.check.recheck?`<p><b>Ponovni pregled ${fmtDate(p.check.recheck.date)}${p.check.recheck.status==="corrected"?" (s popravki)":""}:</b> ${esc(p.check.recheck.note)}</p>`:""}${src?`<ul>${src}</ul>`:""}</div></details>`;
 }
 function renderChips(){
   const present=new Set(posts.map(p=>p.kind));
@@ -536,16 +687,17 @@ function card(p){
       ${openMore.has(p.id)?`<div class="more">
         ${figHtml(p)}
         ${p.basis&&BASIS[p.basis]?`<span class="basis">${BASIS[p.basis]}</span>`:""}
-        <p>${esc(p.text)}</p>
-        ${p.why?`<div class="why"><b>${p.kind==="topic"?"Poudarek":"Zakaj je pomembno"}:</b> ${esc(p.why)}</div>`:""}
+        ${fmtText(p.text)}
+        ${fmtWhy(p)}
         ${(p.kind==="study"||p.kind==="news")&&(p.dateLabel||p.date)?`<div class="ev">${p.kind==="study"?"Članek je izšel":"Vir je bil objavljen"}: ${esc(p.dateLabel||fmtDate(p.date))}</div>`:""}
         ${p.evidence?`<div class="ev">Vrsta dokazov: ${esc(p.evidence)}</div>`:""}
       </div>`:""}
       <button class="rmore" data-more="${p.id}" aria-expanded="${openMore.has(p.id)}">${openMore.has(p.id)?"Prikaži manj":"Preberi več"}</button>
       ${verifyBlock(p)}
+      <button class="rptbtn" data-report="${p.id}">Opaziš napako? Prijavi jo</button>
       <div class="tags">${p.tags.map(t=>`<button class="tag" data-tag="${esc(t)}">#${esc(t)}</button>`).join("")}</div>
     </div>
-    <div class="counts">${st.likes?`<span>${plural(st.likes,LKW)}</span>`:"<span></span>"}${st.comments?`<button data-cm="${p.id}">${plural(st.comments,CMW)}</button>`:""}</div>
+    <div class="counts">${st.likes?`<span>${ICON.heart}${plural(st.likes,LKW)}</span>`:"<span></span>"}${st.comments?`<button data-cm="${p.id}">${ICON.cmsm}${plural(st.comments,CMW)}</button>`:""}</div>
     <div class="actions">
       <button data-like="${p.id}" aria-pressed="${liked.has(p.id)}">${ICON.like}Všeč mi je</button>
       <button data-save="${p.id}" aria-pressed="${saved.has(p.id)}">${ICON.save}${saved.has(p.id)?"Shranjeno":"Shrani"}</button>
@@ -569,9 +721,10 @@ function render(){
   if(!loaded){feed.innerHTML=loadErr?`<div class="empty">Objav ni bilo mogoče naložiti. Preveri internetno povezavo.<br><button class="btn2" data-reload="1">Poskusi znova</button></div>`:`<div class="empty">Nalagam objave …</div>`;return}
   const qq=q.trim().toLowerCase();
   let list=posts.filter(p=>(view!=="saved"||saved.has(p.id))&&(kind==="all"||p.kind===kind)&&(!tag||p.tags.some(t=>t.toLowerCase()===tag.toLowerCase())));
+  if(areaSel)list=list.filter(p=>areaOf(p)[0]===areaSel);
   if(qq)list=list.filter(p=>[p.title,p.summary,p.hook,p.text,p.source,p.why,p.tags.join(" ")].join(" ").toLowerCase().includes(qq));
   const empty=view==="saved"&&!saved.size?"Shranjenih objav še ni. Tapni Shrani pod objavo, ki jo želiš prebrati kasneje.":qq?"Za to iskanje ni zadetkov.":"Ni objav s tem filtrom.";
-  feed.innerHTML=focusBar()+(list.length?list.map(card).join(""):`<div class="empty">${empty}</div>`);
+  feed.innerHTML=(view==="feed"&&!qq?todayHtml(posts)+focusBandHtml(focusActive(),posts):"")+areaRowHtml(posts.filter(p=>view!=="saved"||saved.has(p.id)),areaSel)+(list.length?list.map(card).join(""):`<div class="empty">${empty}</div>`);
 }
 
 /* ---- komentarji ---- */
@@ -607,7 +760,7 @@ async function postCm(pid){
   }catch(e){toast(errText(e))}
   finally{const b=document.querySelector(`[data-cmsend="${pid}"]`);if(b)b.disabled=false}
 }
-function updateCounts(pid){const a=document.getElementById(pid);if(!a)return;const st=stats[pid]||{likes:0,comments:0};const c=a.querySelector(".counts");if(c)c.innerHTML=`${st.likes?`<span>${plural(st.likes,LKW)}</span>`:"<span></span>"}${st.comments?`<button data-cm="${pid}">${plural(st.comments,CMW)}</button>`:""}`}
+function updateCounts(pid){const a=document.getElementById(pid);if(!a)return;const st=stats[pid]||{likes:0,comments:0};const c=a.querySelector(".counts");if(c)c.innerHTML=`${st.likes?`<span>${ICON.heart}${plural(st.likes,LKW)}</span>`:"<span></span>"}${st.comments?`<button data-cm="${pid}">${ICON.cmsm}${plural(st.comments,CMW)}</button>`:""}`}
 
 /* ---- predlogi tem ---- */
 function openSheet(id){$(id).classList.add("open");document.body.style.overflow="hidden"}
@@ -631,11 +784,35 @@ async function sendSuggest(){
 }
 async function renderMine(){
   const feed=$("#feed");
+  if(!myRep){try{myRep=await rpc("my_reports",{p_token:TOKEN})||[]}catch(e){myRep=[]}}
   if(!mySugg){feed.innerHTML=`<div class="empty">Nalagam tvoje predloge …</div>`;try{mySugg=await rpc("my_suggestions",{p_token:TOKEN})||[]}catch(e){feed.innerHTML=`<div class="empty">${esc(errText(e))}</div>`;return}if(view!=="mine")return}
   feed.innerHTML=`<div class="box"><b>Moje teme</b><p class="om">Teme, ki si jih predlagal s te naprave. Vsako pred obdelavo pregleda skrbnik, odobrene pa umetna inteligenca obdela ob eni od naslednjih samodejnih posodobitev.</p><button class="btn2" data-suggest="1">Predlagaj novo temo</button></div>`+
-    (mySugg.length?mySugg.map(s=>`<div class="box"><div class="st st-${esc(s.status)}">${SLABEL[s.status]||esc(s.status)}</div><b>${esc(s.topic)}</b><div class="om">Oddano ${fmtWhen(s.created_at)}</div>${s.review_note?`<p>Opomba skrbnika: ${esc(s.review_note)}</p>`:""}${s.published_post_id&&posts.some(p=>p.id===s.published_post_id)?`<button class="btn2" data-goto="${esc(s.published_post_id)}">Odpri objavo</button>`:""}</div>`).join(""):`<div class="empty">Še nisi predlagal nobene teme.</div>`);
+    (mySugg.length?mySugg.map(s=>`<div class="box"><div class="st st-${esc(s.status)}">${SLABEL[s.status]||esc(s.status)}</div><b>${esc(s.topic)}</b><div class="om">Oddano ${fmtWhen(s.created_at)}</div>${s.review_note?`<p>Opomba skrbnika: ${esc(s.review_note)}</p>`:""}${s.published_post_id&&posts.some(p=>p.id===s.published_post_id)?`<button class="btn2" data-goto="${esc(s.published_post_id)}">Odpri objavo</button>`:""}</div>`).join(""):`<div class="empty">Še nisi predlagal nobene teme.</div>`)+
+    (myRep&&myRep.length?`<h3 class="sec">Moje prijave napak</h3>`+myRep.map(r=>`<div class="box"><div class="st st-${r.status==="fixed"?"done":r.status==="rejected"?"declined":"review"}">${RLABEL[r.status]||esc(r.status)}</div><b>${esc(postTitle(r.post_id))}</b><p>${esc(r.body)}</p>${r.resolution?`<p class="om">Odgovor: ${esc(r.resolution)}</p>`:""}<div class="om">Oddano ${fmtWhen(r.created_at)}</div></div>`).join(""):"");
 }
 
+/* ---- prijave napak ---- */
+let rpPost=null, myRep=null, admRep=null;
+const RLABEL={open:"V preverjanju",fixed:"Popravljeno",rejected:"Ni napake"};
+function openReport(pid){
+  rpPost=pid;const p=posts.find(x=>x.id===pid);
+  $("#rpsub").textContent=p?p.title:"";$("#rpbody").value="";$("#rpname").value=ls.get("ou-ime","");$("#rpmsg").textContent="";
+  $("#rpform").hidden=false;$("#rpdone").hidden=true;openSheet("#rpsheet");setTimeout(()=>$("#rpbody").focus(),50);
+}
+async function sendReport(){
+  const body=$("#rpbody").value.trim();
+  if(body.length<5){$("#rpmsg").textContent="Opiši napako (vsaj 5 znakov).";$("#rpbody").focus();return}
+  const name=$("#rpname").value.trim();
+  $("#rpsend").disabled=true;$("#rpmsg").textContent="";
+  try{await rpc("add_report",{p_post:rpPost,p_name:name,p_body:body,p_token:TOKEN});if(name)ls.set("ou-ime",name.slice(0,40));myRep=null;admRep=null;$("#rpform").hidden=true;$("#rpdone").hidden=false}
+  catch(e){$("#rpmsg").textContent=errText(e)}
+  finally{$("#rpsend").disabled=false}
+}
+function postTitle(id){const p=posts.find(x=>x.id===id);return p?p.title:"Objava ni več prikazana"}
+async function setRep(id,st){
+  try{await rpc("admin_set_report",{p_key:adminKey,p_id:id,p_status:st,p_note:admNote["r"+id]||""});delete admNote["r"+id];admRep=null;renderReview();toast(st==="fixed"?"Označeno kot popravljeno.":st==="rejected"?"Prijava zavrnjena.":"Prijava ponovno odprta.")}
+  catch(e){toast(errText(e))}
+}
 /* ---- skrbnik ---- */
 async function checkAdmin(){
   if(!adminKey){isAdmin=false;return}
@@ -657,12 +834,16 @@ function adminLogout(){adminKey=null;isAdmin=false;ls.del("ou-skrbnik");view="fe
 async function renderReview(){
   const feed=$("#feed");
   if(!isAdmin){view="feed";render();return}
-  if(!admSugg){feed.innerHTML=`<div class="empty">Nalagam predloge …</div>`;try{admSugg=await rpc("admin_suggestions",{p_key:adminKey})||[]}catch(e){feed.innerHTML=`<div class="empty">${esc(errText(e))}</div>`;return}if(view!=="review")return}
+  if(!admSugg||!admRep){feed.innerHTML=`<div class="empty">Nalagam predloge in prijave …</div>`;try{admSugg=await rpc("admin_suggestions",{p_key:adminKey})||[];admRep=await rpc("admin_reports",{p_key:adminKey})||[]}catch(e){feed.innerHTML=`<div class="empty">${esc(errText(e))}</div>`;return}if(view!=="review")return}
+  const ro=admRep.filter(r=>r.status==="open");
+  const oneR=r=>`<div class="box"><div class="st st-${r.status==="fixed"?"done":r.status==="rejected"?"declined":"review"}">${RLABEL[r.status]}</div><button class="lnkt" data-goto="${esc(r.post_id)}">${esc(postTitle(r.post_id))}</button><p>${esc(r.body)}</p><div class="om">${esc(r.author_name||"Brez imena")} · ${fmtWhen(r.created_at)}</div>${r.resolution?`<p class="om">Rešitev: ${esc(r.resolution)}</p>`:""}
+    ${r.status==="open"?`<textarea class="note" data-note="r${r.id}" maxlength="1000" placeholder="Opomba (neobvezno)">${esc(admNote["r"+r.id]||"")}</textarea><div class="row"><button class="btn2 yes" data-rep="${r.id}" data-st="fixed">Popravljeno</button><button class="btn2" data-rep="${r.id}" data-st="rejected">Ni napake</button></div>`:`<div class="row"><button class="btn2" data-rep="${r.id}" data-st="open">Ponovno odpri</button></div>`}</div>`;
+  const repHtml=`<h3 class="sec">Prijave napak${ro.length?` (${pl(ro.length,["odprta","odprti","odprte","odprtih"])})`:""}</h3>`+(admRep.length?admRep.slice(0,30).map(oneR).join(""):`<div class="empty">Ni prijav.</div>`);
   const open=admSugg.filter(s=>s.status==="review"), rest=admSugg.filter(s=>s.status!=="review");
   const one=s=>`<div class="box"><div class="st st-${esc(s.status)}">${SLABEL[s.status]||esc(s.status)}</div><b>${esc(s.topic)}</b><div class="om">${esc(s.author_name||"Brez imena")} · ${fmtWhen(s.created_at)}</div>${s.details?`<p>${linkify(s.details)}</p>`:""}${(s.links||[]).length?`<ul>${s.links.map(l=>`<li>${linkify(l)}</li>`).join("")}</ul>`:""}${s.review_note?`<p class="om">Opomba: ${esc(s.review_note)}</p>`:""}
     ${s.status==="review"?`<textarea class="note" data-note="${s.id}" maxlength="500" placeholder="Opomba za predlagatelja (neobvezno)">${esc(admNote[s.id]||"")}</textarea><div class="row"><button class="btn2 yes" data-adm="${s.id}" data-st="approved">Odobri</button><button class="btn2" data-adm="${s.id}" data-st="declined">Zavrni</button></div>`:s.status!=="done"?`<div class="row"><button class="btn2" data-adm="${s.id}" data-st="review">Vrni v pregled</button></div>`:""}</div>`;
-  feed.innerHTML=`<div class="box"><b>Pregled predlogov</b><p class="om">Odobrene teme samodejno opravilo obdela ob eni od naslednjih posodobitev. Komentarje lahko skriješ z gumbom Skrij pod komentarjem.</p><div class="row"><button class="btn2" data-admreload="1">Osveži</button><button class="btn2" data-logout="1">Odjava skrbnika</button></div></div>`+
-    (open.length?`<h3 class="sec">Čaka na pregled (${open.length})</h3>`+open.map(one).join(""):`<div class="empty">Ni novih predlogov.</div>`)+
+  feed.innerHTML=`<div class="box"><b>Pregled predlogov</b><p class="om">Odobrene teme in odprte prijave napak samodejno obdelata opravili ob naslednjih zagonih. Komentarje lahko skriješ z gumbom Skrij pod komentarjem.</p><div class="row"><button class="btn2" data-admreload="1">Osveži</button><button class="btn2" data-logout="1">Odjava skrbnika</button></div></div>`+
+    repHtml+(open.length?`<h3 class="sec">Predlogi tem: čaka na pregled (${open.length})</h3>`+open.map(one).join(""):`<div class="empty">Ni novih predlogov.</div>`)+
     (rest.length?`<h3 class="sec">Obdelani</h3>`+rest.map(one).join(""):"");
 }
 async function setSugg(id,st){
@@ -674,8 +855,9 @@ async function setSugg(id,st){
 document.addEventListener("click",async e=>{
   const t=e.target.closest("button,a");if(!t)return;
   const d=t.dataset;
-  if(d.view){view=d.view;if(view==="mine")mySugg=null;if(view==="review")admSugg=null;window.scrollTo(0,0);render();return}
+  if(d.view){view=d.view;if(view==="mine"){mySugg=null;myRep=null}if(view==="review")admRep=null;if(view==="review")admSugg=null;window.scrollTo(0,0);render();return}
   if(d.kind){kind=d.kind;render();return}
+  if(d.area!==undefined){areaSel=d.area||null;render();return}
   if(d.tag){tag=d.tag;view=view==="saved"?"saved":"feed";window.scrollTo(0,0);render();return}
   if(t.id==="tagclear"){tag=null;render();return}
   if(d.more){const id=d.more,was=openMore.has(id);was?openMore.delete(id):openMore.add(id);render();if(was){const a=document.getElementById(id);if(a&&a.getBoundingClientRect().top<0)a.scrollIntoView({block:"start"})}return}
@@ -694,7 +876,10 @@ document.addEventListener("click",async e=>{
   if(t.id==="admopen"){e.preventDefault();if(isAdmin){view="review";admSugg=null;window.scrollTo(0,0);render();return}$("#admkey").value="";$("#admmsg").textContent="";openSheet("#admsheet");setTimeout(()=>$("#admkey").focus(),50);return}
   if(t.id==="admgo"){adminLogin();return}
   if(d.logout){adminLogout();return}
-  if(d.admreload){admSugg=null;renderReview();return}
+  if(d.admreload){admSugg=null;admRep=null;renderReview();return}
+  if(d.rep){setRep(d.rep,d.st);return}
+  if(d.report){openReport(d.report);return}
+  if(t.id==="rpsend"){sendReport();return}
   if(d.adm){setSugg(d.adm,d.st);return}
   if(d.goto){view="feed";kind="all";tag=null;q="";$("#q").value="";render();const a=document.getElementById(d.goto);if(a)a.scrollIntoView({block:"start"});return}
   if(d.reload){loaded=false;loadErr=false;render();load();return}
