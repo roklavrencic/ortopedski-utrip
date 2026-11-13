@@ -265,6 +265,15 @@ footer .lnk{font-size:.8rem}
 .admbtn svg{width:19px;height:19px}
 .admbtn.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
 [hidden]{display:none !important}
+.matlink{display:flex;align-items:center;gap:12px;border:2px dashed color-mix(in srgb,var(--accent) 45%,var(--line));background:var(--accent-soft);color:var(--ink);border-radius:14px;padding:12px 14px;text-decoration:none}
+.matlink svg{flex:none;width:26px;height:26px;color:var(--accent)}
+.matlink span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.matlink b{font-weight:600;font-size:.98rem}
+.matlink small{font-size:.8rem;color:var(--muted);line-height:1.4}
+.matlink .arr{width:18px;height:18px}
+.matlink:hover{border-color:var(--accent)}
+.matlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sgor{font-size:.8rem;color:var(--muted);text-align:center;margin:-2px 0}
 /* ---- privlačnejši feed ---- */
 /* ---- prijava napake ---- */
 .rptbtn{display:inline-block;background:none;border:0;padding:4px 0 2px;margin:0 0 8px;color:var(--muted);font:500 .8rem "Instrument Sans",sans-serif;text-decoration:underline;cursor:pointer}
@@ -384,6 +393,8 @@ article{box-shadow:0 1px 2px rgba(15,30,45,.06),0 8px 22px rgba(15,30,45,.07)}
   <div class="panel short">
     <div class="phead"><div><p class="ptitle" id="sgtitle">Predlagaj temo</p><div class="psub">Tema, o kateri bi rad prebral objavo</div></div><button class="x" data-close="1" aria-label="Zapri">×</button></div>
     <div class="form" id="sgform">
+      <a class="matlink" id="sgmat" href="https://claude.ai/artifact/E8iHkyJXB3YS2u2HmFTqE9" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="m21 16-4.5-4.5L8 20"/></svg><span><b>Naloži gradivo (slike, PDF)</b><small>Samo za skrbnika. Odpre različico na claude.ai: tam pritisni + in izberi »Naloži gradivo«.</small></span><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+      <div class="sgor" id="sgor" hidden>ali predlagaj temo z besedilom</div>
       <label>Tema *<input id="sgtopic" maxlength="200" placeholder="npr. Zdravljenje zlomov skafoida"></label>
       <label>Opis (neobvezno)<textarea id="sgdetails" maxlength="2000" placeholder="Kaj te zanima, katero vprašanje naj objava odgovori …"></textarea></label>
       <label>Povezave do člankov (neobvezno, ena v vrstico)<textarea id="sglinks" placeholder="https://doi.org/…"></textarea></label>
@@ -767,7 +778,7 @@ function openSheet(id){$(id).classList.add("open");document.body.style.overflow=
 function closeSheets(){document.querySelectorAll(".sheet.open").forEach(s=>s.classList.remove("open"));document.body.style.overflow=""}
 function openSuggest(){
   $("#sgname").value=ls.get("ou-ime","");$("#sgtopic").value="";$("#sgdetails").value="";$("#sglinks").value="";$("#sgmsg").textContent="";
-  $("#sgform").hidden=false;$("#sgdone").hidden=true;openSheet("#sgsheet");setTimeout(()=>$("#sgtopic").focus(),50);
+  $("#sgform").hidden=false;$("#sgdone").hidden=true;$("#sgmat").hidden=!isAdmin;$("#sgor").hidden=!isAdmin;openSheet("#sgsheet");if(!isAdmin)setTimeout(()=>$("#sgtopic").focus(),50);
 }
 async function sendSuggest(){
   const topic=$("#sgtopic").value.trim();
