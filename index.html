@@ -273,6 +273,18 @@ footer .lnk{font-size:.8rem}
 .matlink .arr{width:18px;height:18px}
 .matlink:hover{border-color:var(--accent)}
 .matlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sgfiles{display:flex;flex-direction:column;gap:8px}
+.sgflab{font-size:.88rem;font-weight:500}
+.sgadd{align-self:flex-start;display:flex;align-items:center;gap:8px;border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--line));background:var(--accent-soft);color:var(--ink);border-radius:10px;padding:9px 14px;font:500 .9rem "Instrument Sans",sans-serif;cursor:pointer}
+.sgadd svg{width:18px;height:18px;color:var(--accent)}
+.sgadd:disabled{opacity:.5;cursor:default}
+.sggrid{display:flex;flex-wrap:wrap;gap:8px}
+.sgf{position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;font:700 .72rem "Instrument Sans",sans-serif;color:var(--fact)}
+.sgf img{width:100%;height:100%;object-fit:cover}
+.sgf button{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;border:0;background:rgba(15,26,36,.78);color:#fff;font-size:12px;line-height:20px;padding:0;cursor:pointer}
+.sgwarn{font-size:.8rem;line-height:1.4;color:var(--muted);border-left:3px solid var(--fact);padding:4px 10px}
+.atts{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.atts button{border:1px solid var(--line);background:var(--card);color:var(--accent);border-radius:999px;padding:5px 12px;font:500 .82rem "Instrument Sans",sans-serif;cursor:pointer}
 .sgor{font-size:.8rem;color:var(--muted);text-align:center;margin:-2px 0}
 /* ---- privlačnejši feed ---- */
 /* ---- prijava napake ---- */
@@ -399,6 +411,13 @@ article{box-shadow:0 1px 2px rgba(15,30,45,.06),0 8px 22px rgba(15,30,45,.07)}
       <label>Opis (neobvezno)<textarea id="sgdetails" maxlength="2000" placeholder="Kaj te zanima, katero vprašanje naj objava odgovori …"></textarea></label>
       <label>Povezave do člankov (neobvezno, ena v vrstico)<textarea id="sglinks" placeholder="https://doi.org/…"></textarea></label>
       <label>Tvoje ime (neobvezno)<input id="sgname" maxlength="40" autocomplete="name"></label>
+      <div class="sgfiles">
+        <span class="sgflab">Priloge (neobvezno): slike ali PDF, največ 5</span>
+        <button type="button" class="sgadd" id="sgadd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.5 12.6 21a5.5 5.5 0 0 1-7.8-7.8l8.9-8.9a3.7 3.7 0 0 1 5.2 5.2l-8.9 8.9a1.8 1.8 0 0 1-2.6-2.6l8.2-8.2"/></svg>Dodaj slike ali PDF</button>
+        <input type="file" id="sgfile" accept="image/*,application/pdf,.pdf" multiple hidden>
+        <div class="sggrid" id="sggrid"></div>
+        <div class="sgwarn">Ne nalagaj slik, rentgenogramov ali izvidov, po katerih bi bilo mogoče prepoznati bolnika. Priloge vidi samo skrbnik, služijo le kot vir za objavo in se v objavah ne prikažejo. Ko je predlog obdelan, se izbrišejo.</div>
+      </div>
       <div class="ainote">Predlog najprej pregleda skrbnik. Odobreno temo nato obdela in objavi umetna inteligenca, ki podatke preveri v izvirnih virih.</div>
       <div class="msg" id="sgmsg" role="alert"></div>
       <button class="go" id="sgsend">Pošlji predlog</button>
@@ -406,6 +425,7 @@ article{box-shadow:0 1px 2px rgba(15,30,45,.06),0 8px 22px rgba(15,30,45,.07)}
     <div class="form" id="sgdone" hidden>
       <p><b>Hvala, predlog je oddan.</b></p>
       <p class="om">Skrbnik ga bo pregledal. Stanje vidiš v zavihku Moje teme.</p>
+      <p class="om" id="sgdonenote"></p>
       <div class="row"><button class="go" id="sgmine">Odpri Moje teme</button><button class="btn2" data-close="1">Zapri</button></div>
     </div>
   </div>
@@ -778,7 +798,7 @@ function openSheet(id){$(id).classList.add("open");document.body.style.overflow=
 function closeSheets(){document.querySelectorAll(".sheet.open").forEach(s=>s.classList.remove("open"));document.body.style.overflow=""}
 function openSuggest(){
   $("#sgname").value=ls.get("ou-ime","");$("#sgtopic").value="";$("#sgdetails").value="";$("#sglinks").value="";$("#sgmsg").textContent="";
-  $("#sgform").hidden=false;$("#sgdone").hidden=true;$("#sgmat").hidden=!isAdmin;$("#sgor").hidden=!isAdmin;openSheet("#sgsheet");if(!isAdmin)setTimeout(()=>$("#sgtopic").focus(),50);
+  sgFiles.forEach(x=>x.prev&&URL.revokeObjectURL(x.prev));sgFiles=[];sgDraw();$("#sgform").hidden=false;$("#sgdone").hidden=true;$("#sgmat").hidden=!isAdmin;$("#sgor").hidden=!isAdmin;openSheet("#sgsheet");if(!isAdmin)setTimeout(()=>$("#sgtopic").focus(),50);
 }
 async function sendSuggest(){
   const topic=$("#sgtopic").value.trim();
@@ -787,11 +807,63 @@ async function sendSuggest(){
   const name=$("#sgname").value.trim();
   $("#sgsend").disabled=true;$("#sgmsg").textContent="";
   try{
-    await rpc("add_suggestion",{p_name:name,p_topic:topic,p_details:$("#sgdetails").value.trim(),p_links:links,p_token:TOKEN});
+    $("#sgadd").disabled=true;
+    const sid=await rpc("add_suggestion",{p_name:name,p_topic:topic,p_details:$("#sgdetails").value.trim(),p_links:links,p_token:TOKEN});
+    const bad=[];
+    for(let i=0;i<sgFiles.length;i++){
+      const x=sgFiles[i];$("#sgmsg").textContent=`Nalagam prilogo ${i+1} od ${sgFiles.length} …`;
+      try{const b64=await sgB64(x.blob);await rpc("add_suggestion_file",{p_token:TOKEN,p_suggestion:sid,p_name:x.name,p_mime:x.type,p_b64:b64})}
+      catch(err){bad.push(x.name+" ("+errText(err)+")")}
+    }
+    $("#sgmsg").textContent="";
+    $("#sgdonenote").textContent=bad.length?"Teh prilog ni bilo mogoče naložiti: "+bad.join(", ")+".":"";
     if(name)ls.set("ou-ime",name.slice(0,40));
     mySugg=null;$("#sgform").hidden=true;$("#sgdone").hidden=false;
   }catch(e){$("#sgmsg").textContent=errText(e)}
-  finally{$("#sgsend").disabled=false}
+  finally{$("#sgsend").disabled=false;$("#sgadd").disabled=false}
+}
+/* ---- priloge predlogov ---- */
+let sgFiles=[];
+const SG_MAX=5, SG_PDF_MAX=4.5*1048576;
+function sgDraw(){
+  $("#sggrid").innerHTML=sgFiles.map((x,i)=>`<div class="sgf" title="${esc(x.name)}">${x.prev?`<img src="${x.prev}" alt="">`:"PDF"}<button type="button" data-sgrm="${i}" aria-label="Odstrani ${esc(x.name)}">×</button></div>`).join("");
+  $("#sgadd").hidden=sgFiles.length>=SG_MAX;
+}
+async function sgImg(f){
+  const bmp=await createImageBitmap(f);
+  const k=Math.min(1,2000/Math.max(bmp.width,bmp.height));
+  const c=document.createElement("canvas");c.width=Math.max(1,Math.round(bmp.width*k));c.height=Math.max(1,Math.round(bmp.height*k));
+  const cx=c.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,c.width,c.height);cx.drawImage(bmp,0,0,c.width,c.height);
+  let q=.85,b=null;
+  for(let t=0;t<4;t++){b=await new Promise(r=>c.toBlob(r,"image/jpeg",q));if(b&&b.size<=SG_PDF_MAX)break;q-=.15}
+  if(!b||b.size>SG_PDF_MAX)throw new Error("slika je prevelika");
+  return b;
+}
+async function sgAdd(list){
+  const msgs=[];
+  for(const f of [...list]){
+    if(sgFiles.length>=SG_MAX){msgs.push(`Največ ${SG_MAX} prilog.`);break}
+    const isPdf=f.type==="application/pdf"||/\.pdf$/i.test(f.name||"");
+    try{
+      if(isPdf){if(f.size>SG_PDF_MAX){msgs.push(f.name+" je večji od 4,5 MB.");continue}sgFiles.push({name:f.name||"dokument.pdf",type:"application/pdf",blob:f,prev:""})}
+      else if((f.type||"").startsWith("image/")||/\.(png|jpe?g|webp|heic|heif|gif|bmp)$/i.test(f.name||"")){const b=await sgImg(f);sgFiles.push({name:(f.name||"slika").replace(/\.[^.]+$/,"")+".jpg",type:"image/jpeg",blob:b,prev:URL.createObjectURL(b)})}
+      else msgs.push((f.name||"Datoteka")+" ni slika ali PDF.");
+    }catch(e){msgs.push((f.name||"Slike")+" ni bilo mogoče prebrati.")}
+  }
+  $("#sgmsg").textContent=msgs.join(" ");sgDraw();
+}
+function sgB64(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]||"");r.onerror=()=>rej(new Error("priloge ni mogoče prebrati"));r.readAsDataURL(blob)})}
+$("#sgadd").addEventListener("click",()=>$("#sgfile").click());
+$("#sgfile").addEventListener("change",e=>{sgAdd(e.target.files);e.target.value=""});
+$("#sggrid").addEventListener("click",e=>{const b=e.target.closest("[data-sgrm]");if(!b)return;e.stopPropagation();const x=sgFiles.splice(+b.dataset.sgrm,1)[0];if(x&&x.prev)URL.revokeObjectURL(x.prev);sgDraw()});
+async function openAtt(id,btn){
+  const w=window.open("","_blank");
+  try{btn.disabled=true;const r=await rpc("admin_file",{p_key:adminKey,p_id:id});const f=Array.isArray(r)?r[0]:r;if(!f)throw new Error("Priloga ne obstaja več.");
+    const bin=atob(f.b64);const u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+    const url=URL.createObjectURL(new Blob([u8],{type:f.mime}));
+    if(w)w.location.href=url;else{const a=document.createElement("a");a.href=url;a.download=f.name;document.body.appendChild(a);a.click();a.remove()}
+    setTimeout(()=>URL.revokeObjectURL(url),120000);
+  }catch(e){if(w)w.close();toast(errText(e))}finally{btn.disabled=false}
 }
 async function renderMine(){
   const feed=$("#feed");
@@ -851,13 +923,44 @@ async function renderReview(){
     ${r.status==="open"?`<textarea class="note" data-note="r${r.id}" maxlength="1000" placeholder="Opomba (neobvezno)">${esc(admNote["r"+r.id]||"")}</textarea><div class="row"><button class="btn2 yes" data-rep="${r.id}" data-st="fixed">Popravljeno</button><button class="btn2" data-rep="${r.id}" data-st="rejected">Ni napake</button></div>`:`<div class="row"><button class="btn2" data-rep="${r.id}" data-st="open">Ponovno odpri</button></div>`}</div>`;
   const repHtml=`<h3 class="sec">Prijave napak${ro.length?` (${pl(ro.length,["odprta","odprti","odprte","odprtih"])})`:""}</h3>`+(admRep.length?admRep.slice(0,30).map(oneR).join(""):`<div class="empty">Ni prijav.</div>`);
   const open=admSugg.filter(s=>s.status==="review"), rest=admSugg.filter(s=>s.status!=="review");
-  const one=s=>`<div class="box"><div class="st st-${esc(s.status)}">${SLABEL[s.status]||esc(s.status)}</div><b>${esc(s.topic)}</b><div class="om">${esc(s.author_name||"Brez imena")} · ${fmtWhen(s.created_at)}</div>${s.details?`<p>${linkify(s.details)}</p>`:""}${(s.links||[]).length?`<ul>${s.links.map(l=>`<li>${linkify(l)}</li>`).join("")}</ul>`:""}${s.review_note?`<p class="om">Opomba: ${esc(s.review_note)}</p>`:""}
+  const one=s=>`<div class="box"><div class="st st-${esc(s.status)}">${SLABEL[s.status]||esc(s.status)}</div><b>${esc(s.topic)}</b><div class="om">${esc(s.author_name||"Brez imena")} · ${fmtWhen(s.created_at)}</div>${s.details?`<p>${linkify(s.details)}</p>`:""}${(s.links||[]).length?`<ul>${s.links.map(l=>`<li>${linkify(l)}</li>`).join("")}</ul>`:""}${s.review_note?`<p class="om">Opomba: ${esc(s.review_note)}</p>`:""}${(s.files||[]).length?`<div class="atts">${s.status==="review"?`<p class="om">Ob odobritvi aplikacija iz prilog prebere besedilo (lahko traja minuto ali dve), da ga lahko uporabi opravilo.</p>`:""}${s.files.map(f=>`<button type="button" data-att="${esc(f.id)}">${f.mime==="application/pdf"?"PDF":"Slika"} ${f.n}: ${esc(f.name)}${f.has_text?" ✓":""}</button>`).join("")}</div>`:s.files_deleted?`<p class="om">Priloge so bile po obdelavi izbrisane.</p>`:""}
     ${s.status==="review"?`<textarea class="note" data-note="${s.id}" maxlength="500" placeholder="Opomba za predlagatelja (neobvezno)">${esc(admNote[s.id]||"")}</textarea><div class="row"><button class="btn2 yes" data-adm="${s.id}" data-st="approved">Odobri</button><button class="btn2" data-adm="${s.id}" data-st="declined">Zavrni</button></div>`:s.status!=="done"?`<div class="row"><button class="btn2" data-adm="${s.id}" data-st="review">Vrni v pregled</button></div>`:""}</div>`;
   feed.innerHTML=`<div class="box"><b>Pregled predlogov</b><p class="om">Odobrene teme in odprte prijave napak samodejno obdelata opravili ob naslednjih zagonih. Komentarje lahko skriješ z gumbom Skrij pod komentarjem.</p><div class="row"><button class="btn2" data-admreload="1">Osveži</button><button class="btn2" data-logout="1">Odjava skrbnika</button></div></div>`+
     repHtml+(open.length?`<h3 class="sec">Predlogi tem: čaka na pregled (${open.length})</h3>`+open.map(one).join(""):`<div class="empty">Ni novih predlogov.</div>`)+
     (rest.length?`<h3 class="sec">Obdelani</h3>`+rest.map(one).join(""):"");
 }
+/* ---- branje besedila iz prilog (ob odobritvi; opravila vidijo samo besedilo) ---- */
+const PDFJS="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",PDFW="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js",TESS="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
+const jsLoaded={};
+function loadJs(u){if(jsLoaded[u])return jsLoaded[u];return jsLoaded[u]=new Promise((res,rej)=>{const sc=document.createElement("script");sc.src=u;sc.onload=()=>res();sc.onerror=()=>{delete jsLoaded[u];rej(new Error("knjižnice za branje ni mogoče naložiti"))};document.head.appendChild(sc)})}
+let ocrW=null;
+async function ocr(src){await loadJs(TESS);if(!ocrW)ocrW=await Tesseract.createWorker("eng+slv");const r=await ocrW.recognize(src);return (r&&r.data&&r.data.text)||""}
+async function fileText(id,prog){
+  const r=await rpc("admin_file",{p_key:adminKey,p_id:id});const f=Array.isArray(r)?r[0]:r;if(!f)return "";
+  const bin=atob(f.b64);const u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
+  if(f.mime==="application/pdf"){
+    await loadJs(PDFJS);pdfjsLib.GlobalWorkerOptions.workerSrc=PDFW;
+    const doc=await pdfjsLib.getDocument({data:u8}).promise;let out="";
+    for(let i=1;i<=Math.min(doc.numPages,40);i++){const pg=await doc.getPage(i);const tc=await pg.getTextContent();out+=`\n[stran ${i}]\n`+tc.items.map(x=>x.str+(x.hasEOL?"\n":" ")).join("")}
+    if(out.replace(/\[stran \d+\]|\s/g,"").length<200){
+      out="";
+      for(let i=1;i<=Math.min(doc.numPages,10);i++){prog(`berem stran ${i}`);const pg=await doc.getPage(i);const vp=pg.getViewport({scale:2});const c=document.createElement("canvas");c.width=vp.width;c.height=vp.height;await pg.render({canvasContext:c.getContext("2d"),viewport:vp}).promise;out+=`\n[stran ${i}, OCR]\n`+await ocr(c)}
+    }
+    return out.trim();
+  }
+  return "[besedilo s slike, OCR]\n"+(await ocr(new Blob([u8],{type:f.mime})));
+}
 async function setSugg(id,st){
+  if(st==="approved"){
+    const s=(admSugg||[]).find(x=>x.id===id),todo=((s&&s.files)||[]).filter(f=>!f.has_text);
+    const btn=document.querySelector(`[data-adm="${id}"][data-st="approved"]`);
+    document.querySelectorAll(`[data-adm="${id}"]`).forEach(b=>b.disabled=true);
+    for(let i=0;i<todo.length;i++){
+      const lab=m=>{if(btn)btn.textContent=`Berem prilogo ${i+1}/${todo.length}${m?": "+m:""} …`};lab("");
+      let txt="";try{txt=await fileText(todo[i].id,lab)}catch(e){txt="[Besedila ni bilo mogoče prebrati: "+((e&&e.message)||"napaka")+"]"}
+      try{await rpc("admin_set_file_text",{p_key:adminKey,p_id:todo[i].id,p_text:txt||"[Na prilogi ni prepoznanega besedila.]"})}catch(e){}
+    }
+  }
   try{await rpc("admin_set_suggestion",{p_key:adminKey,p_id:id,p_status:st,p_note:admNote[id]||""});delete admNote[id];admSugg=null;renderReview();toast(st==="approved"?"Tema odobrena.":st==="declined"?"Tema zavrnjena.":"Tema vrnjena v pregled.")}
   catch(e){toast(errText(e))}
 }
@@ -866,6 +969,7 @@ async function setSugg(id,st){
 document.addEventListener("click",async e=>{
   const t=e.target.closest("button,a");if(!t)return;
   const d=t.dataset;
+  if(d.att){openAtt(d.att,t);return}
   if(d.view){view=d.view;if(view==="mine"){mySugg=null;myRep=null}if(view==="review")admRep=null;if(view==="review")admSugg=null;window.scrollTo(0,0);render();return}
   if(d.kind){kind=d.kind;render();return}
   if(d.area!==undefined){areaSel=d.area||null;render();return}
