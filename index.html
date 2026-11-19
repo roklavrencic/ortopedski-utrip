@@ -73,6 +73,7 @@ article{background:var(--card);border-top:1px solid var(--line);border-bottom:1p
 .body p.sum{font-size:1.02rem;margin:0 0 6px}
 .rmore{display:inline-block;background:none;border:0;padding:2px 0 10px;color:var(--accent);font:600 .92rem "Instrument Sans",sans-serif;cursor:pointer}
 .more{border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
+.kpts{margin:2px 0 8px}.kpts ul{margin:4px 0 0}.kpts li{margin:3px 0}
 .why{border-left:3px solid var(--accent);background:var(--accent-soft);padding:8px 12px;border-radius:0 6px 6px 0;font-size:.92rem;margin-bottom:10px}
 .why b{font-weight:600}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
@@ -534,6 +535,7 @@ function cleanPost(row){
   const p={id,kind:d.kind,date:okDate(d.date)?d.date:"",source:s(d.source,120),title:s(d.title,300),text:s(d.text,9000),
     tags:(Array.isArray(d.tags)?d.tags:[]).map(t=>s(t,40)).filter(Boolean).slice(0,8)};
   for(const [k,n] of [["via",120],["dateLabel",60],["why",3000],["evidence",300],["summary",800],["hook",300],["notice",600],["basis",20]]) if(d[k])p[k]=s(d[k],n);
+  if(d.fmt===2||d.fmt==="2")p.fmt=2;
   if(typeof d.related==="string"&&/^[a-z0-9-]{1,80}$/.test(d.related))p.related=d.related;
   if(okUrl(d.url))p.url=d.url;
   p.publishedAt=typeof d.publishedAt==="string"&&d.publishedAt?d.publishedAt:String(row.published_at||"");
@@ -578,6 +580,12 @@ function fmtWhy(p){
   const items=w.split(/;\s+/).map(x=>x.trim().replace(/[.;]\s*$/,"")).filter(Boolean);
   if(p.kind==="topic"&&items.length>=2)return `<div class="why"><b>${lab}</b><ul>${items.map(x=>`<li>${esc(x.charAt(0).toUpperCase()+x.slice(1))}</li>`).join("")}</ul></div>`;
   return `<div class="why"><b>${lab}:</b> ${esc(w)}</div>`;
+}
+function keyPts(p){
+  if(p.fmt!==2||!p.why)return "";
+  const items=String(p.why).replace(/^\s*(Na kratko|Poudarek|Zakaj je pomembno)\s*:\s*/i,"").split(/;\s+/).map(x=>x.trim().replace(/[.;]\s*$/,"")).filter(Boolean);
+  if(!items.length)return "";
+  return `<div class="why kpts"><b>Na kratko</b><ul>${items.map(x=>`<li>${esc(x.charAt(0).toUpperCase()+x.slice(1))}</li>`).join("")}</ul></div>`;
 }
 function sumOf(p){
   if(p.summary)return p.summary;
@@ -715,11 +723,12 @@ function card(p){
       ${p.hook&&p.summary?`<div class="hook">${esc(p.hook)}</div>`:""}
       <h2>${esc(p.title)}</h2>
       <p class="sum">${esc(sumOf(p))}</p>
+      ${keyPts(p)}
       ${openMore.has(p.id)?`<div class="more">
         ${figHtml(p)}
         ${p.basis&&BASIS[p.basis]?`<span class="basis">${BASIS[p.basis]}</span>`:""}
         ${fmtText(p.text)}
-        ${fmtWhy(p)}
+        ${p.fmt===2?"":fmtWhy(p)}
         ${(p.kind==="study"||p.kind==="news")&&(p.dateLabel||p.date)?`<div class="ev">${p.kind==="study"?"Članek je izšel":"Vir je bil objavljen"}: ${esc(p.dateLabel||fmtDate(p.date))}</div>`:""}
         ${p.evidence?`<div class="ev">Vrsta dokazov: ${esc(p.evidence)}</div>`:""}
       </div>`:""}
