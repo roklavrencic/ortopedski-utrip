@@ -261,10 +261,19 @@ h3.sec{max-width:640px;margin:18px auto 8px;padding:0 16px;font:600 .95rem "Inst
 @media (prefers-reduced-motion: reduce){#toast{transition:none}}
 footer .lnk{font-size:.8rem}
 .bar{position:relative}
-.brand{padding-right:48px}
+.brand{padding-right:100px}
 .admbtn{position:absolute;right:12px;top:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer}
 .admbtn svg{width:19px;height:19px}
 .admbtn.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.bellbtn{right:60px}
+.bellbtn[hidden]{display:none}
+.pushbar{margin:0 16px 12px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;font-size:.92rem;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.pushbar[hidden]{display:none}
+.pushbar span{flex:1 1 200px}
+.pushbar button{border:0;border-radius:8px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}
+.pushbar .yes{background:var(--accent);color:#fff}
+.pushbar .no{background:transparent;color:var(--muted)}
+article.flash{outline:2px solid var(--accent);outline-offset:2px;transition:outline-color 1.5s}
 [hidden]{display:none !important}
 .matlink{display:flex;align-items:center;gap:12px;border:2px dashed color-mix(in srgb,var(--accent) 45%,var(--line));background:var(--accent-soft);color:var(--ink);border-radius:14px;padding:12px 14px;text-decoration:none}
 .matlink svg{flex:none;width:26px;height:26px;color:var(--accent)}
@@ -379,6 +388,7 @@ article{box-shadow:0 1px 2px rgba(15,30,45,.06),0 8px 22px rgba(15,30,45,.07)}
       <h1><svg class="logo" viewBox="0 0 400 400" aria-hidden="true"><rect width="400" height="400" rx="88" fill="#8FB8DE"/><text x="200" y="283" text-anchor="middle" font-family="Manrope, system-ui, sans-serif" font-weight="800" font-size="236" letter-spacing="-6" fill="#2B5C8A">OU</text><rect x="139" y="58" width="24" height="288" rx="12" fill="#F7B27A"/><path d="M147 84 L147 150 M155 170 L155 250 M147 268 L147 330" stroke="#E58F52" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M205 95 Q285 200 205 305" stroke="#fff" stroke-width="27" stroke-linecap="round" fill="none"/><circle cx="211.3" cy="80.1" r="18" fill="#fff"/><circle cx="189.1" cy="97.1" r="18" fill="#fff"/><circle cx="211.3" cy="319.9" r="18" fill="#fff"/><circle cx="189.1" cy="302.9" r="18" fill="#fff"/><path d="M163 137 L216 142 M163 200 L229 200 M163 263 L216 258" stroke="#F7B27A" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M215 144 L246 130 M228 200 L262 200 M215 256 L246 270" stroke="#F7B27A" stroke-width="9" stroke-linecap="round" fill="none"/><rect x="135" y="131" width="32" height="12" rx="6" fill="#E58F52"/><rect x="135" y="194" width="32" height="12" rx="6" fill="#E58F52"/><rect x="135" y="257" width="32" height="12" rx="6" fill="#E58F52"/></svg>Ortopedski utrip</h1>
       <span class="updated" id="updated"></span>
     </div>
+    <button class="admbtn bellbtn" id="bell" hidden aria-label="Obvestila o novih objavah" title="Obvestila o novih objavah"></button>
     <button class="admbtn" id="admopen" aria-label="Prijava skrbnika" title="Prijava skrbnika"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" aria-selected="true" data-view="feed">Novo</button>
@@ -392,6 +402,7 @@ article{box-shadow:0 1px 2px rgba(15,30,45,.06),0 8px 22px rgba(15,30,45,.07)}
 </header>
 <div class="aibanner" role="note"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/></svg><span><b>Vsebino aplikacije v celoti pripravlja umetna inteligenca.</b> Podatki so lahko netočni ali nepopolni, zato jih pred uporabo preveri v navedenih virih. Aplikacija ni namenjena odločanju o zdravljenju posameznega bolnika.</span></div></div>
 <main>
+  <div class="pushbar" id="pushbar" hidden><span id="pushtext">Želite obvestilo na telefon ob vsaki novi objavi?</span><button class="yes" id="pushyes">Vklopi obvestila</button><button class="no" id="pushno">Ne zdaj</button></div>
   <div class="tagfilter" id="tagfilter"><span id="tagtext"></span><button id="tagclear">Počisti</button></div>
   <div id="feed"></div>
 </main>
@@ -1017,9 +1028,72 @@ document.addEventListener("input",e=>{
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSheets();if(e.key==="Enter"&&e.target.id==="admkey")adminLogin()});
 document.querySelectorAll(".sheet").forEach(s=>s.addEventListener("click",e=>{if(e.target===s)closeSheets()}));
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&Date.now()-lastLoad>10*60*1000)load()});
+
+/* ---- potisna obvestila ---- */
+const VAPID="BHP0aiBjLYr3Uz8km2dxO5u09G0ilsvBctELVe_s9LhdiUp6S5T3LTWCzuVX5o0Yo1-7WeNTBvVax3KWz2BOFbA";
+const BELL_ON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
+const BELL_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.7 3A6 6 0 0 1 18 8c0 2.7.4 4.6 1 6"/><path d="M17 17H3s3-2 3-9a5.9 5.9 0 0 1 .3-1.8"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="m2 2 20 20"/></svg>';
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+const pushOK="serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window;
+let pushOn=false;
+function u8(b){const p="=".repeat((4-b.length%4)%4);const r=atob((b+p).replace(/-/g,"+").replace(/_/g,"/"));return Uint8Array.from(r,c=>c.charCodeAt(0))}
+async function swReg(){return navigator.serviceWorker.ready}
+async function saveSub(sub){const j=sub.toJSON();await rpc("add_push_sub",{p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth})}
+async function pushEnable(){
+  if(!pushOK){toast(isIOS?"Najprej dodajte aplikacijo na začetni zaslon (Deli → Dodaj na začetni zaslon).":"Ta brskalnik ne podpira obvestil.");return}
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=="granted"){ls.set("ou-push","off");pushUI();toast("Obvestila so v brskalniku blokirana. Omogočite jih v nastavitvah strani.");return}
+    const reg=await swReg();
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(VAPID)});
+    await saveSub(sub);ls.set("ou-push","on");pushOn=true;pushUI();toast("Obvestila so vklopljena.");
+  }catch(e){pushUI();toast("Obvestil ni bilo mogoče vklopiti.")}
+}
+async function pushDisable(){
+  try{const reg=await swReg();const sub=await reg.pushManager.getSubscription();
+    if(sub){await rpc("remove_push_sub",{p_endpoint:sub.endpoint}).catch(()=>{});await sub.unsubscribe()}
+  }catch(e){}
+  ls.set("ou-push","off");pushOn=false;pushUI();toast("Obvestila so izklopljena.");
+}
+function pushUI(){
+  const b=$("#bell"), bar=$("#pushbar"), pref=ls.get("ou-push",null);
+  const can=pushOK||(isIOS&&!standalone);
+  b.hidden=!can;b.innerHTML=pushOn?BELL_ON:BELL_OFF;b.classList.toggle("on",pushOn);
+  b.setAttribute("aria-label",pushOn?"Obvestila vklopljena – izklopi":"Obvestila izklopljena – vklopi");b.title=b.getAttribute("aria-label");
+  const blocked=pushOK&&Notification.permission==="denied";
+  bar.hidden=!(can&&!pushOn&&!blocked&&pref!=="off"&&!(ls.get("ou-push-later",0)>Date.now()));
+  $("#pushtext").textContent=(isIOS&&!standalone)?"Za obvestila o novih objavah najprej dodajte aplikacijo na začetni zaslon (Deli → Dodaj na začetni zaslon), nato jo odprite od tam.":"Želite obvestilo na telefon ob vsaki novi objavi?";
+  $("#pushyes").hidden=isIOS&&!standalone;
+}
+async function pushInit(){
+  if(pushOK){
+    try{const reg=await swReg();const sub=await reg.pushManager.getSubscription();
+      if(sub&&Notification.permission==="granted"){pushOn=true;saveSub(sub).catch(()=>{})}
+      else if(Notification.permission==="granted"&&ls.get("ou-push",null)!=="off"){
+        const s=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(VAPID)});await saveSub(s);pushOn=true;ls.set("ou-push","on")}
+    }catch(e){}
+  }
+  pushUI();
+}
+$("#bell").addEventListener("click",()=>{if(isIOS&&!standalone&&!pushOK){toast("Najprej dodajte aplikacijo na začetni zaslon (Deli → Dodaj na začetni zaslon).");return}pushOn?pushDisable():pushEnable()});
+$("#pushyes").addEventListener("click",pushEnable);
+$("#pushno").addEventListener("click",()=>{ls.set("ou-push-later",Date.now()+3*24*3600*1000);pushUI()});
+
+/* ---- odpiranje objave iz povezave/obvestila ---- */
+let pendingHash=decodeURIComponent(location.hash.slice(1)||"");
+function openHash(){
+  if(!pendingHash||!loaded)return;const id=pendingHash;const p=posts.find(x=>x.id===id);if(!p)return;pendingHash="";
+  view="feed";kind="all";tag=null;q="";openMore.add(id);render();
+  setTimeout(()=>{const a=document.getElementById(id);if(a){a.scrollIntoView({behavior:"smooth",block:"start"});a.classList.add("flash");setTimeout(()=>a.classList.remove("flash"),2500)}},60);
+  try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+}
+addEventListener("hashchange",()=>{pendingHash=decodeURIComponent(location.hash.slice(1)||"");openHash()});
+if("serviceWorker" in navigator)navigator.serviceWorker.addEventListener("message",e=>{const d=e.data||{};if(d.type==="open-post"&&d.url){try{pendingHash=decodeURIComponent(new URL(d.url).hash.slice(1));if(pendingHash)load().then(openHash)}catch(_){}}});
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 $("#addbtn").classList.add("on");
-render();load();checkAdmin();
+render();load().then(openHash);checkAdmin();pushInit();
 
 </script>
 </body>
