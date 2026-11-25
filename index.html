@@ -269,6 +269,9 @@ footer .lnk{font-size:.8rem}
 .bellbtn[hidden]{display:none}
 .pushbar{margin:0 16px 12px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;font-size:.92rem;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .pushbar[hidden]{display:none}
+.instbar{position:relative;padding-right:40px}
+.instbar img{width:36px;height:36px;border-radius:8px;flex:none}
+.instbar .x{position:absolute;top:4px;right:4px;width:32px;height:32px;padding:0;font-size:1.2rem;line-height:1;color:var(--muted);background:transparent}
 .pushbar span{flex:1 1 200px}
 .pushbar button{border:0;border-radius:8px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}
 .pushbar .yes{background:var(--accent);color:#fff}
@@ -402,6 +405,7 @@ article{box-shadow:0 1px 2px rgba(15,30,45,.06),0 8px 22px rgba(15,30,45,.07)}
 </header>
 <div class="aibanner" role="note"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/></svg><span><b>Vsebino aplikacije v celoti pripravlja umetna inteligenca.</b> Podatki so lahko netočni ali nepopolni, zato jih pred uporabo preveri v navedenih virih. Aplikacija ni namenjena odločanju o zdravljenju posameznega bolnika.</span></div></div>
 <main>
+  <div class="pushbar instbar" id="instbar" hidden><img src="icon-192.png" alt=""><span><b>Namesti Ortopedski utrip kot aplikacijo</b><br>Odpira se z ikone na začetnem zaslonu, obvestila pa prihajajo pod imenom aplikacije.</span><button class="yes" id="instyes">Namesti aplikacijo</button><button class="x" id="instno" aria-label="Skrij">×</button></div>
   <div class="pushbar" id="pushbar" hidden><span id="pushtext">Želite obvestilo na telefon ob vsaki novi objavi?</span><button class="yes" id="pushyes">Vklopi obvestila</button><button class="no" id="pushno">Ne zdaj</button></div>
   <div class="tagfilter" id="tagfilter"><span id="tagtext"></span><button id="tagclear">Počisti</button></div>
   <div id="feed"></div>
@@ -1063,7 +1067,7 @@ function pushUI(){
   b.hidden=!can;b.innerHTML=pushOn?BELL_ON:BELL_OFF;b.classList.toggle("on",pushOn);
   b.setAttribute("aria-label",pushOn?"Obvestila vklopljena – izklopi":"Obvestila izklopljena – vklopi");b.title=b.getAttribute("aria-label");
   const blocked=pushOK&&Notification.permission==="denied";
-  bar.hidden=!(can&&!pushOn&&!blocked&&pref!=="off"&&!(ls.get("ou-push-later",0)>Date.now()));
+  bar.hidden=!(can&&!pushOn&&!blocked&&pref!=="off"&&!(ls.get("ou-push-later",0)>Date.now()))||instShown();
   $("#pushtext").textContent=(isIOS&&!standalone)?"Za obvestila o novih objavah najprej dodajte aplikacijo na začetni zaslon (Deli → Dodaj na začetni zaslon), nato jo odprite od tam.":"Želite obvestilo na telefon ob vsaki novi objavi?";
   $("#pushyes").hidden=isIOS&&!standalone;
 }
@@ -1091,6 +1095,19 @@ function openHash(){
 }
 addEventListener("hashchange",()=>{pendingHash=decodeURIComponent(location.hash.slice(1)||"");openHash()});
 if("serviceWorker" in navigator)navigator.serviceWorker.addEventListener("message",e=>{const d=e.data||{};if(d.type==="open-post"&&d.url){try{pendingHash=decodeURIComponent(new URL(d.url).hash.slice(1));if(pendingHash)load().then(openHash)}catch(_){}}});
+
+/* ---- namestitev aplikacije ---- */
+let instEvt=null;
+function instShown(){return !!instEvt&&!standalone&&!(ls.get("ou-inst-later",0)>Date.now())}
+function instUI(){$("#instbar").hidden=!instShown();pushUI()}
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();instEvt=e;instUI()});
+addEventListener("appinstalled",()=>{instEvt=null;instUI();toast("Aplikacija je nameščena. Odprite jo z ikone na začetnem zaslonu.")});
+$("#instyes").addEventListener("click",async()=>{
+  if(!instEvt)return;const e=instEvt;
+  try{await e.prompt();const r=await e.userChoice;if(r&&r.outcome==="accepted"){instEvt=null}}catch(_){}
+  instUI();
+});
+$("#instno").addEventListener("click",()=>{ls.set("ou-inst-later",Date.now()+7*24*3600*1000);instUI()});
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 $("#addbtn").classList.add("on");
 render();load().then(openHash);checkAdmin();pushInit();
