@@ -406,7 +406,7 @@ article{box-shadow:0 1px 2px rgba(15,30,45,.06),0 8px 22px rgba(15,30,45,.07)}
 <div class="aibanner" role="note"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/></svg><span><b>Vsebino aplikacije v celoti pripravlja umetna inteligenca.</b> Podatki so lahko netočni ali nepopolni, zato jih pred uporabo preveri v navedenih virih. Aplikacija ni namenjena odločanju o zdravljenju posameznega bolnika.</span></div></div>
 <main>
   <div class="pushbar instbar" id="instbar" hidden><img src="icon-192.png" alt=""><span><b>Namesti Ortopedski utrip kot aplikacijo</b><br>Odpira se z ikone na začetnem zaslonu, obvestila pa prihajajo pod imenom aplikacije.</span><button class="yes" id="instyes">Namesti aplikacijo</button><button class="x" id="instno" aria-label="Skrij">×</button></div>
-  <div class="pushbar" id="pushbar" hidden><span id="pushtext">Želite obvestilo na telefon ob vsaki novi objavi?</span><button class="yes" id="pushyes">Vklopi obvestila</button><button class="no" id="pushno">Ne zdaj</button></div>
+  <div class="pushbar" id="pushbar" hidden><span id="pushtext">Želite enkrat na dan, okoli 13. ure, obvestilo o novih objavah?</span><button class="yes" id="pushyes">Vklopi obvestila</button><button class="no" id="pushno">Ne zdaj</button></div>
   <div class="tagfilter" id="tagfilter"><span id="tagtext"></span><button id="tagclear">Počisti</button></div>
   <div id="feed"></div>
 </main>
@@ -1068,7 +1068,7 @@ function pushUI(){
   b.setAttribute("aria-label",pushOn?"Obvestila vklopljena – izklopi":"Obvestila izklopljena – vklopi");b.title=b.getAttribute("aria-label");
   const blocked=pushOK&&Notification.permission==="denied";
   bar.hidden=!(can&&!pushOn&&!blocked&&pref!=="off"&&!(ls.get("ou-push-later",0)>Date.now()))||instShown();
-  $("#pushtext").textContent=(isIOS&&!standalone)?"Za obvestila o novih objavah najprej dodajte aplikacijo na začetni zaslon (Deli → Dodaj na začetni zaslon), nato jo odprite od tam.":"Želite obvestilo na telefon ob vsaki novi objavi?";
+  $("#pushtext").textContent=(isIOS&&!standalone)?"Za obvestila o novih objavah najprej dodajte aplikacijo na začetni zaslon (Deli → Dodaj na začetni zaslon), nato jo odprite od tam.":"Želite enkrat na dan, okoli 13. ure, obvestilo o novih objavah?";
   $("#pushyes").hidden=isIOS&&!standalone;
 }
 async function pushInit(){
