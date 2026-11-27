@@ -925,6 +925,7 @@ async function checkAdmin(){
   if(!adminKey){isAdmin=false;return}
   try{isAdmin=!!(await rpc("admin_check",{p_key:adminKey}))}catch(e){isAdmin=false}
   if(!isAdmin){adminKey=null;ls.del("ou-skrbnik")}
+  if(isAdmin){markAdminSub();if(new URLSearchParams(location.search).has("pregled")){view="review";admSugg=null;try{history.replaceState(null,"",location.pathname)}catch(e){}}}
   render();
 }
 async function adminLogin(){
@@ -932,7 +933,7 @@ async function adminLogin(){
   $("#admgo").disabled=true;$("#admmsg").textContent="";
   try{
     const ok=await rpc("admin_check",{p_key:key});
-    if(ok){adminKey=key;ls.set("ou-skrbnik",key);isAdmin=true;closeSheets();view="review";admSugg=null;render();toast("Prijavljen kot skrbnik.")}
+    if(ok){adminKey=key;ls.set("ou-skrbnik",key);isAdmin=true;closeSheets();view="review";admSugg=null;render();toast("Prijavljen kot skrbnik.");markAdminSub()}
     else $("#admmsg").textContent="Ključ ni pravilen.";
   }catch(e){$("#admmsg").textContent=errText(e)}
   finally{$("#admgo").disabled=false}
@@ -1052,7 +1053,7 @@ async function pushEnable(){
     const reg=await swReg();
     let sub=await reg.pushManager.getSubscription();
     if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(VAPID)});
-    await saveSub(sub);ls.set("ou-push","on");pushOn=true;pushUI();toast("Obvestila so vklopljena.");
+    await saveSub(sub);ls.set("ou-push","on");pushOn=true;pushUI();markAdminSub();toast(isAdmin?"Obvestila so vklopljena (tudi za nove predloge tem).":"Obvestila so vklopljena.");
   }catch(e){pushUI();toast("Obvestil ni bilo mogoče vklopiti.")}
 }
 async function pushDisable(){
@@ -1070,6 +1071,11 @@ function pushUI(){
   bar.hidden=!(can&&!pushOn&&!blocked&&pref!=="off"&&!(ls.get("ou-push-later",0)>Date.now()))||instShown();
   $("#pushtext").textContent=(isIOS&&!standalone)?"Za obvestila o novih objavah najprej dodajte aplikacijo na začetni zaslon (Deli → Dodaj na začetni zaslon), nato jo odprite od tam.":"Želite enkrat na dan, okoli 13. ure, obvestilo o novih objavah?";
   $("#pushyes").hidden=isIOS&&!standalone;
+}
+async function markAdminSub(){
+  if(!isAdmin||!adminKey||!pushOK)return;
+  try{const reg=await swReg();const sub=await reg.pushManager.getSubscription();
+    if(sub&&Notification.permission==="granted"){await saveSub(sub);await rpc("admin_push_sub",{p_key:adminKey,p_endpoint:sub.endpoint})}}catch(e){}
 }
 async function pushInit(){
   if(pushOK){
@@ -1094,7 +1100,7 @@ function openHash(){
   try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
 }
 addEventListener("hashchange",()=>{pendingHash=decodeURIComponent(location.hash.slice(1)||"");openHash()});
-if("serviceWorker" in navigator)navigator.serviceWorker.addEventListener("message",e=>{const d=e.data||{};if(d.type==="open-post"&&d.url){try{pendingHash=decodeURIComponent(new URL(d.url).hash.slice(1));if(pendingHash)load().then(openHash)}catch(_){}}});
+if("serviceWorker" in navigator)navigator.serviceWorker.addEventListener("message",e=>{const d=e.data||{};if(d.type==="open-post"&&d.url){try{if(/[?&]pregled=1/.test(d.url)&&isAdmin){view="review";admSugg=null;render();window.scrollTo(0,0);return}pendingHash=decodeURIComponent(new URL(d.url).hash.slice(1));if(pendingHash)load().then(openHash)}catch(_){}}});
 
 /* ---- namestitev aplikacije ---- */
 let instEvt=null;
